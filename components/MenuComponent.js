@@ -41,10 +41,6 @@ class Menu extends Component {
                 keyExtractor={item => item.id.toString()}
             />
         );
-
-
-
-
     }
 }
 
