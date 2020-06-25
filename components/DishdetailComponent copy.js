@@ -16,8 +16,82 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => ({
     postFavorite: (dishId) => dispatch(postFavorite(dishId)),
     postComment: (dishId, rating, author, comment) => dispatch(postComment(dishId, rating, author, comment))
-    // postComment: () => { dispatch(postComment()) }
 })
+
+class CommentForm extends Component {
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            dish: props.dish,
+            rating: 0,
+            author: '',
+            comment: '',
+            showModal: false
+        }
+
+        this.toggleModal = this.toggleModal.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    handleSubmit() {
+        this.props.postComment(this.state.dish.dishId, this.state.rating, this.state.author, this.state.comment);
+        this.toggleModal();
+    }
+
+    toggleModal() {
+        this.setState({
+            showModal: !this.state.showModal
+        });
+    }
+
+    render() {
+        return (
+            <View>
+                <Modal animationType={"slide"} transparent={false}
+                    visible={this.state.showModal}
+                    onDismiss={() => this.toggleModal()}
+                    onRequestClose={() => this.toggleModal()}>
+                    <View style={styles.modal}>
+                        <Rating
+                            showRating
+                            ratingCount={5}
+                            onFinishRating={this.state.rating}
+                            style={{ paddingVertical: 10 }}
+                        />
+                        <Input
+                            placeholder="Author"
+                            leftIcon={{ type: 'font-awesome', name: 'user-o', }}
+                            onChangeText={value => this.setState({ author: value })}
+                        />
+                        <Input
+                            placeholder="Comment"
+                            leftIcon={{ type: 'font-awesome', name: 'comment-o' }}
+                            onChangeText={value => this.setState({ comment: value })}
+                        />
+                        <Button
+                            onPress={() => {
+                                this.handleComment();
+                                // this.resetForm();
+                            }}
+                            color="#512DA8"
+                            title="Submit"
+                        />
+                        <Button
+                            onPress={() => {
+                                this.toggleModal();
+                                // this.resetForm();
+                            }}
+                            color="gray"
+                            title="Close"
+                        />
+                    </View>
+                </Modal>
+            </View>
+        );
+    }
+}
 
 function RenderComments(props) {
 
@@ -46,27 +120,27 @@ function RenderComments(props) {
 }
 class RenderDish extends Component {
 
-    constructor(props) {
-        super(props);
+    // constructor(props) {
+    //     super(props);
 
-        this.state = {
-            dish: props.dish,
-            rating: props.rating,
-            author: props.author,
-            comment: props.comment,
-            showModal: false
-        }
-    }
+    //     this.state = {
+    //         dish: props.dish,
+    //         rating: props.rating,
+    //         author: props.author,
+    //         comment: props.comment,
+    //         showModal: false
+    //     }
+    // }
 
-    toggleModal() {
-        this.setState({ showModal: !this.state.showModal });
-    }
+    // toggleModal() {
+    //     this.setState({ showModal: !this.state.showModal });
+    // }
 
-    handleComment = () => {
-        console.log(JSON.stringify(this.state));
-        this.props.postComment(this.state.dish.id, this.state.rating, this.state.author, this.state.comment);
-        this.toggleModal();
-    };
+    // handleComment = () => {
+    //     console.log(JSON.stringify(this.state));
+    //     this.props.postComment(dishId, rating, author, comment);
+    //     this.toggleModal();
+    // };
 
     render() {
         const dish = this.state.dish;
@@ -98,45 +172,7 @@ class RenderDish extends Component {
                             onPress={() => this.toggleModal()}
                         />
                     </View>
-                    <Modal animationType={"slide"} transparent={false}
-                        visible={this.state.showModal}
-                        onDismiss={() => this.toggleModal()}
-                        onRequestClose={() => this.toggleModal()}>
-                        <View style={styles.modal}>
-                            <Rating
-                                showRating
-                                ratingCount={5}
-                                onFinishRating={value => this.setState({ rating: value })}
-                                style={{ paddingVertical: 10 }}
-                            />
-                            <Input
-                                placeholder="Author"
-                                leftIcon={{ type: 'font-awesome', name: 'user-o', }}
-                                onChangeText={value => this.setState({ author: value })}
-                            />
-                            <Input
-                                placeholder="Comment"
-                                leftIcon={{ type: 'font-awesome', name: 'comment-o' }}
-                                onChangeText={value => this.setState({ comment: value })}
-                            />
-                            <Button
-                                onPress={() => {
-                                    this.handleComment();
-                                    // this.resetForm();
-                                }}
-                                color="#512DA8"
-                                title="Submit"
-                            />
-                            <Button
-                                onPress={() => {
-                                    this.toggleModal();
-                                    // this.resetForm();
-                                }}
-                                color="gray"
-                                title="Close"
-                            />
-                        </View>
-                    </Modal>
+                    <CommentForm dish={dish} />
                 </Card>
             );
         }
@@ -155,18 +191,14 @@ class Dishdetail extends Component {
     markFavorite(dishId) {
         this.props.postFavorite(dishId);
     }
+
     render() {
-        console.log(this.props.comments, 'this.props.comments');
-
         const dishId = this.props.navigation.getParam('dishId', '');
-
         return (
             <ScrollView>
-                <RenderDish
-                    dish={this.props.dishes.dishes[+dishId]}
+                <RenderDish dish={this.props.dishes.dishes[+dishId]}
                     favorite={this.props.favorites.some(el => el === dishId)}
                     onPress={() => this.markFavorite(dishId)}
-                    postComment={this.props.postComment}
                 />
                 <RenderComments comments={this.props.comments.comments.filter((comment) => comment.dishId === dishId)} />
             </ScrollView>
