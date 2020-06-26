@@ -27,7 +27,22 @@ class Reservation extends Component {
 
     handleReservation() {
         console.log(JSON.stringify(this.state));
-        this.toggleModal();
+        Alert.alert(
+            'Your Reservation OK?',
+            `Number of Guests: ${this.state.guests} \nSmoking? ${this.state.smoking}\nDate and Time: ${this.state.date}`,
+            [
+                {
+                    text: 'Cancel',
+                    onPress: () => this.resetForm(),
+                    style: ' cancel'
+                },
+                {
+                    text: 'OK',
+                    onPress: () => this.resetForm()
+                }
+            ],
+            { cancelable: false }
+        )
     }
 
     resetForm() {
@@ -94,25 +109,7 @@ class Reservation extends Component {
                     </View>
                     <View>
                         <Button
-                            onPress={() => {
-                                Alert.alert(
-                                    'Your Reservation OK?',
-                                    `Number of Guests: ${this.state.guests} \nSmoking? ${this.state.smoking}\nDate and Time: ${this.state.date}`,
-                                    [
-                                        {
-                                            text: 'Cancel',
-                                            onPress: () => this.resetForm(),
-                                            style: ' cancel'
-                                        },
-                                        {
-                                            text: 'OK',
-                                            onPress: () => this.resetForm()
-                                        }
-                                    ],
-                                    { cancelable: false }
-                                )
-                            }
-                            }
+                            onPress={() => { this.handleReservation() }}
                             title="Reserve"
                             color="#512DA8"
                             accessibilityLabel="Learn more about this purple button"
