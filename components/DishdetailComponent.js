@@ -16,7 +16,6 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => ({
     postFavorite: (dishId) => dispatch(postFavorite(dishId)),
     postComment: (dishId, rating, author, comment) => dispatch(postComment(dishId, rating, author, comment))
-    // postComment: () => { dispatch(postComment()) }
 })
 
 function RenderComments(props) {
@@ -86,7 +85,7 @@ class RenderDish extends Component {
                             name={this.props.favorite ? 'heart' : 'heart-o'}
                             type='font-awesome'
                             color='#f50'
-                            onPress={() => props.favorite ? console.log('Already favorite') : props.onPress()}
+                            onPress={() => this.props.favorite ? console.log('Already favorite') : this.props.onPress()}
                         />
                         <Icon
                             style={{ flex: 1 }}
@@ -122,7 +121,6 @@ class RenderDish extends Component {
                             <Button
                                 onPress={() => {
                                     this.handleComment();
-                                    // this.resetForm();
                                 }}
                                 color="#512DA8"
                                 title="Submit"
@@ -130,7 +128,6 @@ class RenderDish extends Component {
                             <Button
                                 onPress={() => {
                                     this.toggleModal();
-                                    // this.resetForm();
                                 }}
                                 color="gray"
                                 title="Close"
