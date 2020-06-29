@@ -4,8 +4,11 @@ import { Icon, Input, CheckBox, Button } from 'react-native-elements';
 import * as SecureStore from 'expo-secure-store';
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
+import * as ImageManipulator from 'expo-image-manipulator';
 import { createBottomTabNavigator } from 'react-navigation';
 import { baseUrl } from '../shared/baseUrl';
+
+// import { Camera, Asset, ImageManipulator } from 'expo';
 
 class LoginTab extends Component {
 
@@ -144,12 +147,24 @@ class RegisterTab extends Component {
                 aspect: [4, 3],
             });
             if (!capturedImage.cancelled) {
-                console.log(capturedImage);
-                this.setState({ imageUrl: capturedImage.uri });
+                // alert(capturedImage.uri);
+                this.processImage(capturedImage.uri);
             }
         }
+    };
 
-    }
+    processImage = async (imageUri) => {
+        // alert(imageUri); 
+        let processedImage = await ImageManipulator.manipulateAsync(
+            imageUri,
+            [
+                { resize: { width: 400 } }
+            ],
+            { format: 'png' }
+        );
+        console.log(processedImage, 'khabir');
+        this.setState({ imageUrl: processedImage.uri });
+    };
 
     static navigationOptions = {
         title: 'Register',
