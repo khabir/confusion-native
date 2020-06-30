@@ -47,7 +47,6 @@ class LoginTab extends Component {
     };
 
     handleLogin() {
-        console.log(JSON.stringify(this.state));
         if (this.state.remember)
             SecureStore.setItemAsync('userinfo', JSON.stringify({ username: this.state.username, password: this.state.password }))
                 .catch((error) => console.log('Could not save user info', error));
@@ -147,14 +146,23 @@ class RegisterTab extends Component {
                 aspect: [4, 3],
             });
             if (!capturedImage.cancelled) {
-                // alert(capturedImage.uri);
                 this.processImage(capturedImage.uri);
             }
         }
     };
 
+    getImageFromGallery = async () => {
+        let selectImage = await ImagePicker.launchImageLibraryAsync({
+            allowsEditing: true,
+            aspect: [4, 3],
+        });
+        if (!selectImage.cancelled) {
+            console.log(selectImage);
+            this.processImage(selectImage.uri);
+        }
+    };
+
     processImage = async (imageUri) => {
-        // alert(imageUri); 
         let processedImage = await ImageManipulator.manipulateAsync(
             imageUri,
             [
@@ -162,7 +170,6 @@ class RegisterTab extends Component {
             ],
             { format: 'png' }
         );
-        console.log(processedImage, 'khabir');
         this.setState({ imageUrl: processedImage.uri });
     };
 
@@ -179,7 +186,6 @@ class RegisterTab extends Component {
     };
 
     handleRegister() {
-        console.log(JSON.stringify(this.state));
         if (this.state.remember)
             SecureStore.setItemAsync('userinfo', JSON.stringify({ username: this.state.username, password: this.state.password }))
                 .catch((error) => console.log('Could not save user info', error));
@@ -198,6 +204,10 @@ class RegisterTab extends Component {
                         <Button
                             title="Camera"
                             onPress={this.getImageFromCamera}
+                        />
+                        <Button
+                            title="Gallery"
+                            onPress={this.getImageFromGallery}
                         />
                     </View>
                     <Input

@@ -134,7 +134,6 @@ function RenderDish(props) {
             return true;
         },
         onPanResponderEnd: (e, gestureState) => {
-            console.log("pan responder end", gestureState);
             if (recognizeDrag(gestureState))
                 Alert.alert(
                     'Add Favorite',

@@ -70,7 +70,6 @@ function RenderDish(props) {
         },
         onPanResponderGrant: () => { this.view.rubberBand(1000).then(endState => console.log(endState.finished ? 'finished' : 'cancelled')); },
         onPanResponderEnd: (e, gestureState) => {
-            console.log("pan responder end", gestureState);
             if (recognizeDrag(gestureState))
                 Alert.alert(
                     'Add Favorite',
@@ -168,7 +167,6 @@ class Dishdetail extends Component {
     }
 
     handleComment = (dishId) => {
-        console.log(JSON.stringify(this.state));
         this.props.postComment(dishId, this.state.rating, this.state.author, this.state.comment);
         this.toggleModal();
     };

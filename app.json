@@ -2,9 +2,17 @@
   "name": "confusion",
   "displayName": "confusion",
   "expo": {
+    "sdkVersion": "27.0.0",
     "name": "confusion",
-    "slug": "expo-template-bare",
+    "icon": "./icon.png",
+    "slug": "confusion",
     "version": "1.0.0",
+    "ios": {
+      "bundleIdentifier": "net.food.confusion.confusion"
+    },
+    "android": {
+      "package": "net.food.confusion.confusion"
+    },
     "platforms": [
       "ios",
       "android",
